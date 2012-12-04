@@ -74,8 +74,8 @@ static int print_one_graph (graph_config_t *cfg, /* {{{ */
       (unsigned int) strlen (title));
 
   yajl_gen_string (handler,
-      (unsigned char *) "selector",
-      (unsigned int) strlen ("selector"));
+      (unsigned char *) "select",
+      (unsigned int) strlen ("select"));
   ident_to_json (selector, handler);
 
   yajl_gen_string (handler,
