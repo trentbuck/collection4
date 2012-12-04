@@ -633,10 +633,19 @@ int graph_to_json (const graph_config_t *cfg, /* {{{ */
     return (EINVAL);
 
   yajl_gen_map_open (handler);
+
+  yajl_gen_string (handler,
+      (unsigned char *) "title",
+      (unsigned int) strlen ("title"));
+  yajl_gen_string (handler,
+      (unsigned char *) cfg->title,
+      (unsigned int) strlen (cfg->title));
+
   yajl_gen_string (handler,
       (unsigned char *) "select",
       (unsigned int) strlen ("select"));
   ident_to_json (cfg->select, handler);
+
   yajl_gen_string (handler,
       (unsigned char *) "instances",
       (unsigned int) strlen ("instances"));
@@ -644,6 +653,7 @@ int graph_to_json (const graph_config_t *cfg, /* {{{ */
   for (i = 0; i < cfg->instances_num; i++)
     inst_to_json (cfg->instances[i], handler);
   yajl_gen_array_close (handler);
+
   yajl_gen_map_close (handler);
 
   return (0);
