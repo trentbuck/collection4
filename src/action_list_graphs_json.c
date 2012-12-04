@@ -112,8 +112,6 @@ static int print_all_graphs (yajl_gen handler) /* {{{ */
 
 int action_list_graphs_json (void) /* {{{ */
 {
-  graph_config_t *cfg;
-
   yajl_gen_config handler_config;
   yajl_gen handler;
 
