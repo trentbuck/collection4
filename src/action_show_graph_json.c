@@ -48,7 +48,7 @@ static void write_callback (__attribute__((unused)) void *ctx, /* {{{ */
 
 int action_show_graph_json (void) /* {{{ */
 {
-  graph_config_t *cfg;
+  graph_config_t const *cfg;
 
   yajl_gen_config handler_config;
   yajl_gen handler;
@@ -70,10 +70,7 @@ int action_show_graph_json (void) /* {{{ */
       /* alloc functions = */ NULL,
       /* context = */ NULL);
   if (handler == NULL)
-  {
-    graph_destroy (cfg);
     return (-1);
-  }
 
   printf ("Content-Type: application/json\n");
 
@@ -87,7 +84,6 @@ int action_show_graph_json (void) /* {{{ */
 
   status = graph_to_json (cfg, handler);
 
-  graph_destroy (cfg);
   yajl_gen_free (handler);
 
   return (status);

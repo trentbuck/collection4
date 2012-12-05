@@ -38,6 +38,15 @@ int gl_config_submit (void);
 
 int gl_register_data_provider (const char *name, data_provider_t *p);
 
+/*
+ * Returns the currently "selected" graph config.
+ *
+ * This function evaluates the HTTP query parameters and searches for a
+ * matching graph config structure. If a matching graph config is found, it
+ * will return a pointer to the graph config. Do *not* free or call
+ * graph_destroy() on this pointer. If no graph is found or parameters are
+ * incomplete, NULL is returned.
+ */
 graph_config_t *gl_graph_get_selected (void);
 
 int gl_graph_get_all (_Bool include_dynamic,
