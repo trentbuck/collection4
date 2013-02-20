@@ -1,6 +1,6 @@
 /**
  * collection4 - collection.js
- * Copyright (C) 2010  Florian octo Forster
+ * Copyright (C) 2010-2013  Florian octo Forster
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,7 @@
  * Boston, MA  02110-1301  USA
  *
  * Authors:
- *   Florian octo Forster <ff at octo.it>
+ *   Florian octo Forster <octo at collectd.org>
  **/
 
 var c4 =
@@ -230,86 +230,42 @@ function ident_describe (ident, selector) /* {{{ */
   return (ret);
 } /* }}} function ident_describe */
 
-function def_draw_one (def, data, series_array) /* {{{ */
-{
-  var chart_series = new Object ();
-
-  chart_series.type = 'line';
-  chart_series.pointInterval = data.interval * 1000.0;
-  chart_series.pointStart = data.first_value_time * 1000.0;
-  chart_series.data = data.data;
-  chart_series.lineWidth = 1;
-  chart_series.shadow = false;
-  chart_series.marker = { enabled: false };
-
-  if (def.legend)
-    chart_series.name = def.legend;
-  else if (def.ds_name)
-    chart_series.name = def.ds_name;
-
-  if (def.area)
-    chart_series.type = 'area';
-
-  if (def.stack)
-    chart_series.stacking = 'normal';
-
-  if ((def.color) && (def.color != 'random'))
-    chart_series.color = def.color;
-
-  series_array.push (chart_series);
-} /* }}} function def_draw_one */
-
-function def_draw (def, data_list, series_array) /* {{{ */
-{
-  var i;
-
-  for (i = 0; i < data_list.length; i++)
-  {
-    if ((def.ds_name) && (def.ds_name != data_list[i].data_source))
-      continue;
-    if (!ident_matches (def.select, data_list[i].file))
-      continue;
-
-    def_draw_one (def, data_list[i], series_array);
-  }
-} /* }}} function def_draw */
-
 /*
- * Given one metric definition, returns the appropriate data from the data
- * list. */
-function def_get_data (def, data_list)
+ * Given one metric definition, returns the appropriate metric data from the
+ * graph data (data list). */
+function metric_def_get_data (metric_def, graph_data)
 {
   var i;
 
-  for (i = 0; i < data_list.length; i++)
+  for (i = 0; i < graph_data.length; i++)
   {
-    if ((def.ds_name) && (def.ds_name != data_list[i].data_source))
+    if ((metric_def.ds_name) && (metric_def.ds_name != graph_data[i].data_source))
       continue;
-    if (!ident_matches (def.select, data_list[i].file))
+    if (!ident_matches (metric_def.select, graph_data[i].file))
       continue;
 
-    return (data_list[i]);
+    return (graph_data[i]);
   }
   return;
 }
 
-function def_to_rickshaw_one (def, data)
+function metric_def_to_rickshaw_series (metric_def, metric_data)
 {
   var series = {
     data: []
   };
   var i;
 
-  if (def.legend)
-    series.name = def.legend;
+  if (metric_def.legend)
+    series.name = metric_def.legend;
 
-  if (def.color)
-    series.color = def.color;
+  if (metric_def.color)
+    series.color = metric_def.color;
 
-  for (i = 0; i < data.data.length; i++)
+  for (i = 0; i < metric_data.data.length; i++)
   {
-    var x = data.first_value_time + (i * data.interval);
-    var y = data.data[i];
+    var x = metric_data.first_value_time + (i * metric_data.interval);
+    var y = metric_data.data[i];
 
     series.data.push ({'x': x, 'y': y});
   }
@@ -317,9 +273,10 @@ function def_to_rickshaw_one (def, data)
   return (series);
 }
 
-function def_to_rickshaw (graph_def, data_list)
+function graph_def_to_rickshaw_config (root_element, graph_def, data_list)
 {
   var graph_config = {
+      element: root_element,
       renderer: 'line',
       series: []
   };
@@ -328,86 +285,69 @@ function def_to_rickshaw (graph_def, data_list)
 
   for (i = 0; i < graph_def.defs.length; i++)
   {
-    var def = graph_def.defs[i];
-    var data = def_get_data (def, data_list);
+    var metric_def = graph_def.defs[i];
+    var metric_data = metric_def_get_data (metric_def, data_list);
     var series;
 
-    if (!data)
+    if (!metric_data)
       continue;
 
-    series = def_to_rickshaw_one (def, data);
+    series = metric_def_to_rickshaw_series (metric_def, metric_data);
     if (series)
       graph_config.series.push (series);
-
-    //if (def.area)
-    //  graph_config.renderer = 'area';
   }
 
   return (graph_config);
 }
 
-function inst_draw_rickshaw (inst, def, data_list)
+function graph_def_to_rickshaw_graph (root_element, graph_def, graph_data)
 {
-  var graph_config = def_to_rickshaw (def, data_list);
+  var graph_config = graph_def_to_rickshaw_config (root_element, graph_def, graph_data);
 
-  graph_config.element = document.getElementById (inst.container);
-
-  inst.chart = new Rickshaw.Graph (graph_config);
-  inst.chart.render ();
+  var graph = new Rickshaw.Graph (graph_config);
+  graph.render ();
 
   var x_axis = new Rickshaw.Graph.Axis.Time({
-    graph: inst.chart
+    graph: graph
   });
   x_axis.render ();
 
   var y_axis = new Rickshaw.Graph.Axis.Y({
-    graph: inst.chart
+    graph: graph
   });
   y_axis.render ();
 }
 
-function inst_draw (inst, def, data_list)
+function inst_draw_rickshaw (inst, graph_def, graph_data)
 {
-  inst_draw_rickshaw (inst, def, data_list);
+  var root_element = document.getElementById (inst.container);
+
+  inst.chart = graph_def_to_rickshaw_graph (root_element, graph_def, graph_data);
 }
 
-function inst_redraw (inst, def, data_list) /* {{{ */
+function inst_draw (inst, graph_def, graph_data)
+{
+  inst_draw_rickshaw (inst, graph_def, graph_data);
+}
+
+function inst_redraw (inst, graph_def, graph_data) /* {{{ */
 {
   var series_array;
   var i;
 
   if (!inst.chart)
-    return (inst_draw (inst, def, data_list));
-
-  series_array = new Array ();
-  for (i = def.defs.length - 1; i >= 0; i--)
-    def_draw (def.defs[i], data_list, series_array);
-
-  if (inst.chart.series.length != series_array.length)
-  {
-    alert ("inst.chart.series.length != series_array.length");
-    return;
-  }
-
-  for (i = inst.chart.series.length - 1; i >= 0; i--)
-  {
-    series_array[i].visible = inst.chart.series[i].visible;
-    inst.chart.series[i].remove (/* redraw = */ false);
-  }
-
-  for (i = 0; i < series_array.length; i++)
-    inst.chart.addSeries (series_array[i], /* redraw = */ false);
-
-  inst.chart.redraw ();
+    return (inst_draw (inst, graph_def, graph_data));
+  else
+    return; /* TODO: Insert new data into the graph */
 } /* }}} function inst_redraw */
 
 function inst_fetch_data (inst, begin, end) /* {{{ */
 {
-  var def;
+  var graph_def;
   var params;
 
-  def = inst_get_defs (inst);
-  if (!def)
+  graph_def = inst_get_defs (inst);
+  if (!graph_def)
     return;
 
   params = instance_get_params (inst);
@@ -419,7 +359,7 @@ function inst_fetch_data (inst, begin, end) /* {{{ */
   $.getJSON ("collection.fcgi", params,
       function (data)
       {
-        inst_redraw (inst, def, data);
+        inst_redraw (inst, graph_def, data);
       }); /* getJSON */
 } /* }}} inst_fetch_data */
 
