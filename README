@@ -109,12 +109,13 @@ License
   MIT license and the GPL. The file "share/jquery-1.4.4.min.js" includes a
   license header which points you to more detailed information.
 
-  c4 includes the JavaScript library "Highcharts" which is licensed under the
-  Creative Commons Attribution-NonCommercial 3.0 License (CC-by-nc 3.0). This
-  means that the library is free of charge for non-commercial use. The file
-  "share/highcharts.js" includes a license header which points you to more
-  detailed information. More information on Highcharts and licensing options is
-  available from <http://www.highcharts.com/>.
+  c4 includes the JavaScript library "D3.js" which is licensed under the
+  3-clause BSD license. More information on D3.js is available from
+  <http://d3js.org/>.
+
+  c4 includes the JavaScript library "Rickshaw" which is licensed under the
+  MIT license. More information on Rickshaw is available from
+  <http://code.shutterstock.com/rickshaw/>.
 
 
 Author

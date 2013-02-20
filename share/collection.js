@@ -274,116 +274,102 @@ function def_draw (def, data_list, series_array) /* {{{ */
   }
 } /* }}} function def_draw */
 
-function inst_get_chart_opts (inst, def) /* {{{ */
+/*
+ * Given one metric definition, returns the appropriate data from the data
+ * list. */
+function def_get_data (def, data_list)
 {
-  var chart_opts = new Object ();
-
-  chart_opts.chart =
-  {
-    renderTo: inst.container,
-    zoomType: 'x'
-  };
-  chart_opts.xAxis =
-  {
-    type: 'datetime',
-    maxZoom: 300, // five minutes
-    title: { text: null },
-    events:
-    {
-      setExtremes: function (event)
-      {
-        var begin = null;
-        var end   = null;
-
-        if ((event.min) && (event.max))
-        {
-          begin = event.min / 1000.0;
-          end   = event.max / 1000.0;
-        }
-        inst_fetch_data (inst, begin, end);
-      }
-    }
-  };
-  chart_opts.yAxis =
-  {
-    labels:
-    {
-      formatter: function () { return (value_to_string (this.value)); }
-    },
-    startOnTick: false,
-    endOnTick: false
-  };
-  chart_opts.legend =
-  {
-    labelFormatter: function ()
-    {
-      var series = this;
-      var min = Number.MAX_VALUE;
-      var max = Number.NEGATIVE_INFINITY;
-      var num = 0;
-      var sum = 0;
-      var avg;
-      var i;
-
-      for (i = 0; i < this.data.length; i++)
-      {
-        var v;
-
-        v = this.data[i].y;
-        if (v == null)
-          continue;
-
-        if (min > v)
-          min = v;
-        if (max < v)
-          max = v;
-
-        sum += v;
-        num++;
-      }
-
-      if (num == 0)
-      {
-        min = null;
-        max = null;
-        avg = null;
-      }
-      else
-      {
-        avg = sum / num;
-      }
-
-      return (this.name + " (" + value_to_string (min) + " min, "
-          + value_to_string (avg) + " avg, "
-          + value_to_string (max) + " max)");
-    }
-  };
-  chart_opts.series = new Array ();
-
-  if (def.title)
-    chart_opts.title = { text: def.title };
-
-  if (def.vertical_label)
-    chart_opts.yAxis.title = { text: def.vertical_label };
-
-  return (chart_opts);
-} /* }}} function chart_opts_get */
-
-function inst_draw (inst, def, data_list) /* {{{ */
-{
-  var chart_opts;
   var i;
 
-  if (!inst || !def || !data_list)
-    return;
+  for (i = 0; i < data_list.length; i++)
+  {
+    if ((def.ds_name) && (def.ds_name != data_list[i].data_source))
+      continue;
+    if (!ident_matches (def.select, data_list[i].file))
+      continue;
 
-  chart_opts = inst_get_chart_opts (inst, def);
+    return (data_list[i]);
+  }
+  return;
+}
 
-  for (i = def.defs.length - 1; i >= 0; i--)
-    def_draw (def.defs[i], data_list, chart_opts.series);
+function def_to_rickshaw_one (def, data)
+{
+  var series = {
+    data: []
+  };
+  var i;
 
-  inst.chart = new Highcharts.Chart (chart_opts);
-} /* }}} function inst_draw */
+  if (def.legend)
+    series.name = def.legend;
+
+  if (def.color)
+    series.color = def.color;
+
+  for (i = 0; i < data.data.length; i++)
+  {
+    var x = data.first_value_time + (i * data.interval);
+    var y = data.data[i];
+
+    series.data.push ({'x': x, 'y': y});
+  }
+
+  return (series);
+}
+
+function def_to_rickshaw (graph_def, data_list)
+{
+  var graph_config = {
+      renderer: 'line',
+      series: []
+  };
+  var graph;
+  var i;
+
+  for (i = 0; i < graph_def.defs.length; i++)
+  {
+    var def = graph_def.defs[i];
+    var data = def_get_data (def, data_list);
+    var series;
+
+    if (!data)
+      continue;
+
+    series = def_to_rickshaw_one (def, data);
+    if (series)
+      graph_config.series.push (series);
+
+    //if (def.area)
+    //  graph_config.renderer = 'area';
+  }
+
+  return (graph_config);
+}
+
+function inst_draw_rickshaw (inst, def, data_list)
+{
+  var graph_config = def_to_rickshaw (def, data_list);
+
+  graph_config.element = document.getElementById (inst.container);
+
+  inst.chart = new Rickshaw.Graph (graph_config);
+  inst.chart.render ();
+
+  var x_axis = new Rickshaw.Graph.Axis.Time({
+    graph: inst.chart
+  });
+  x_axis.render ();
+
+  var y_axis = new Rickshaw.Graph.Axis.Y({
+    graph: inst.chart
+  });
+  y_axis.render ();
+}
+
+function inst_draw (inst, def, data_list)
+{
+  inst_draw_rickshaw (inst, def, data_list);
+}
 
 function inst_redraw (inst, def, data_list) /* {{{ */
 {
