@@ -267,7 +267,6 @@ static int gl_update_cache (void) /* {{{ */
 {
   int fd;
   yajl_gen handler;
-  yajl_gen_config handler_config = { /* pretty = */ 1, /* indent = */ "  " };
   const char *cache_file = graph_config_get_cache_file ();
   struct flock lock;
   struct stat statbuf;
@@ -320,13 +319,13 @@ static int gl_update_cache (void) /* {{{ */
     return (errno);
   }
 
-  handler = yajl_gen_alloc2 (gl_dump_cb, &handler_config,
-      /* alloc funcs = */ NULL, /* ctx = */ &fd);
+  handler = yajl_gen_alloc(NULL);
   if (handler == NULL)
   {
     close (fd);
     return (-1);
   }
+  yajl_gen_config(handler, yajl_gen_print_callback, gl_dump_cb, &fd);
 
   fprintf (stderr, "gl_update_cache: Start writing data\n");
   fflush (stderr);
@@ -611,7 +610,6 @@ static int gl_read_cache (_Bool block) /* {{{ */
 {
   yajl_handle handle;
   gl_json_context_t context;
-  yajl_parser_config handle_config = { /* comments = */ 0, /* check UTF-8 */ 0 };
 
   int fd;
   int cmd;
@@ -706,7 +704,6 @@ static int gl_read_cache (_Bool block) /* {{{ */
   context.ident = NULL;
 
   handle = yajl_alloc (&gl_json_callbacks,
-      &handle_config,
       /* alloc funcs = */ NULL,
       &context);
 
@@ -732,7 +729,7 @@ static int gl_read_cache (_Bool block) /* {{{ */
     }
     else if (rd_status == 0)
     {
-      yajl_parse_complete (handle);
+      yajl_complete_parse (handle);
       break;
     }
     else

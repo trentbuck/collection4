@@ -196,7 +196,6 @@ static int show_instance_json (graph_config_t *cfg, /* {{{ */
     graph_instance_t *inst,
     long begin, long end, int index)
 {
-  yajl_gen_config handler_config;
   yajl_gen handler;
   const unsigned char *json_buffer;
   unsigned int json_buffer_length;
@@ -215,20 +214,16 @@ static int show_instance_json (graph_config_t *cfg, /* {{{ */
     return (ENOMEM);
   }
 
-  memset (&handler_config, 0, sizeof (handler_config));
-  handler_config.beautify = 1;
-  handler_config.indentString = "  ";
-
-  handler = yajl_gen_alloc2 (/* callback = */ NULL,
-      &handler_config,
-      /* alloc functions = */ NULL,
-      /* context = */ NULL);
+  handler = yajl_gen_alloc(NULL);
   if (handler == NULL)
   {
     ident_destroy (inst_selector);
     ident_destroy (graph_selector);
     return (-1);
   }
+#warning Is this a correct translation from yajl1 to yajl2, or should I omit this line entirely? --twb, 2021
+  /* yajl_gen_config(handler, yajl_gen_print_callback, NULL, NULL); */
+  yajl_gen_config(handler, yajl_gen_beautify, 1);
 
   yajl_gen_map_open (handler);
 
