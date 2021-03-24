@@ -1,0 +1,10 @@
+[Socket]
+ListenStream=/run/collection4.socket
+
+# Allow nginx (fastcgi-pass) to connect to this AF_UNIX socket.
+SocketUser=www-data
+SocketGroup=www-data
+SocketMode=0660
+
+[Install]
+WantedBy=sockets.target

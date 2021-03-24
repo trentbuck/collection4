@@ -21,7 +21,7 @@ Package: collection4
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends},
  libjs-jquery, libjs-rickshaw, libjs-d3
-Recommends: nginx-light | httpd, fcgiwrap | libapache2-mod-fcgid
+Recommends: nginx-light | httpd
 Description: lightweight web-based collectd rrd visualizer
  collection 4 (c4) is a web-based front-end to the RRD files updated by
  collectd. It is designed to be highly efficient and handle large
