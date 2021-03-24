@@ -1,3 +1,7 @@
 #!/usr/bin/make -f
 %:
 	dh $@ --with autoreconf
+
+# FIXME: fix upstream's "make install",
+#        instead of just throwing it away and using debian/install.
+override_dh_auto_install:

@@ -1,1 +1,5 @@
+src/collection.fcgi            /usr/lib/cgi-bin/
+share/collection.conf          /etc/
+share/style.css                /usr/share/collection/
+share/collection.js            /usr/share/collection/
 debian/nginx/collection4.conf  /etc/nginx/sites-available/

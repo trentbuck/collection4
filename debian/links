@@ -1,0 +1,15 @@
+# Don't use embedded copies of code.
+# FIXME: this upgrades jquery from 1.4.4 to 3.5, which is likely to be painful!
+/usr/share/javascript/d3/d3.js                      /usr/share/collection/d3.js
+/usr/share/javascript/d3/d3.min.js                  /usr/share/collection/d3.min.js
+/usr/share/javascript/jquery/jquery.js              /usr/share/collection/jquery.js
+/usr/share/javascript/jquery/jquery.min.js          /usr/share/collection/jquery.min.js
+/usr/share/javascript/jquery/jquery.min.js.brotli   /usr/share/collection/jquery.min.js.brotli
+/usr/share/javascript/jquery/jquery.min.js.gz       /usr/share/collection/jquery.min.js.gz
+/usr/share/javascript/jquery/jquery.min.map         /usr/share/collection/jquery.min.map
+/usr/share/javascript/jquery/jquery.min.map.brotli  /usr/share/collection/jquery.min.map.brotli
+/usr/share/javascript/jquery/jquery.min.map.gz      /usr/share/collection/jquery.min.map.gz
+/usr/share/javascript/rickshaw/rickshaw.css         /usr/share/collection/rickshaw.css
+/usr/share/javascript/rickshaw/rickshaw.js          /usr/share/collection/rickshaw.js
+/usr/share/javascript/rickshaw/rickshaw.min.css     /usr/share/collection/rickshaw.min.css
+/usr/share/javascript/rickshaw/rickshaw.min.js      /usr/share/collection/rickshaw.min.js

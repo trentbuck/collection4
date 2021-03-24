@@ -689,7 +689,7 @@ int html_print_page (const char *title, /* {{{ */
       "    <title>%s</title>\n"
       "    <link rel=\"stylesheet\" type=\"text/css\" href=\"../../share/"PACKAGE"/style.css\" />\n"
       "    <link rel=\"stylesheet\" type=\"text/css\" href=\"../../share/"PACKAGE"/rickshaw.min.css\" />\n"
-      "    <script type=\"text/javascript\" src=\"../../share/"PACKAGE"/jquery-1.4.4.min.js\">\n"
+      "    <script type=\"text/javascript\" src=\"../../share/"PACKAGE"/jquery.min.js\">\n"
       "    </script>\n"
       "    <script type=\"text/javascript\" src=\"../../share/"PACKAGE"/d3.min.js\">\n"
       "    </script>\n"

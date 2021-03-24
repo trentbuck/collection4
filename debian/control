@@ -19,7 +19,8 @@ Vcs-Git: https://github.com/trentbuck/collection4
 
 Package: collection4
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends},
+ libjs-jquery, libjs-rickshaw, libjs-d3
 Recommends: nginx-light | httpd, fcgiwrap | libapache2-mod-fcgid
 Description: lightweight web-based collectd rrd visualizer
  collection 4 (c4) is a web-based front-end to the RRD files updated by
