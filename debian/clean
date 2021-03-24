@@ -1,0 +1,15 @@
+# Shut up, dh-autoreconf
+aclocal.m4
+config.log
+configure
+share/Makefile.in
+src/Makefile.in
+src/config.h.in
+Makefile.in
+depcomp
+src/.deps/*
+
+# I think this is just upstream not having a clean target at all?
+src/parser.c
+src/parser.h
+src/scanner.c

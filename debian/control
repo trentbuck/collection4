@@ -1,0 +1,29 @@
+Source: collection4
+Section: utils
+Priority: optional
+Standards-Version: 4.5.1
+Maintainer: Trent W. Buck <trentbuck@gmail.com>
+Build-Depends:
+ debhelper-compat (= 13),
+ pkg-config,
+ flex,
+ bison,
+ libfcgi-dev,
+ librrd-dev,
+ libyajl-dev,
+# NOTE: this is optional?
+ libcollectdclient-dev
+Rules-Requires-Root: no
+Homepage: https://octo.it/c4/
+Vcs-Git: https://github.com/trentbuck/collection4
+
+Package: collection4
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: lightweight web-based collectd rrd visualizer
+ collection 4 (c4) is a web-based front-end to the RRD files updated by
+ collectd. It is designed to be highly efficient and handle large
+ installations - with 50,000 and more RRD files - well.
+ .
+ Graphs (charts) can be rendered server-side by rrdtool, or
+ client-side by https://tech.shutterstock.com/rickshaw
