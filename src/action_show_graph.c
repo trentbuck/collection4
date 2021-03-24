@@ -204,7 +204,7 @@ int action_show_graph (void) /* {{{ */
   show_graph_data_t pg_data;
 
   char tmp[128];
-  char title[128];
+  char title[sizeof(tmp) + sizeof("Graph \"\"")];
 
   memset (&pg_data, 0, sizeof (pg_data));
   pg_data.cfg = gl_graph_get_selected ();

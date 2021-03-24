@@ -198,7 +198,7 @@ static int show_instance_json (graph_config_t *cfg, /* {{{ */
 {
   yajl_gen handler;
   const unsigned char *json_buffer;
-  unsigned int json_buffer_length;
+  size_t json_buffer_length;
 
   graph_ident_t *graph_selector;
   graph_ident_t *inst_selector;
@@ -379,7 +379,7 @@ int action_show_instance (void) /* {{{ */
   show_graph_data_t pg_data;
 
   char tmp[128];
-  char title[128];
+  char title[sizeof(tmp) + sizeof("Graph \"\"")];
   const char *format;
 
   memset (&pg_data, 0, sizeof (pg_data));

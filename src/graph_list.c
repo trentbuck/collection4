@@ -387,7 +387,7 @@ static void set_state (gl_json_context_t *ctx, /* {{{ */
 
 static int gl_json_string (void *user_data, /* {{{ */
     const unsigned char *str,
-    unsigned int str_length)
+    size_t str_length)
 {
   gl_json_context_t *ctx = user_data;
   char buffer[str_length + 1];
@@ -548,7 +548,7 @@ static int gl_json_end_array (void *user_data) /* {{{ */
 
 static int gl_json_key (void *user_data, /* {{{ */
     const unsigned char *str,
-    unsigned int str_length)
+    size_t str_length)
 {
   gl_json_context_t *ctx = user_data;
   char buffer[str_length + 1];

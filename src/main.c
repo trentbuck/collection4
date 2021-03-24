@@ -152,12 +152,9 @@ static int run (void) /* {{{ */
   return (0);
 } /* }}} int run */
 
-int main (int argc, char **argv) /* {{{ */
+int main (void) /* {{{ */
 {
   int status;
-
-  argc = 0;
-  argv = NULL;
 
   if (FCGX_IsCGI ())
     status = handle_request ();
