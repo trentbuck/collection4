@@ -68,7 +68,7 @@ Dependencies
   * libfcgi
     <http://www.fastcgi.com/>
 
-  * librrd_th (thread-safe version of librrd)
+  * librrd 1.6+ (thread-safe version of librrd)
     <http://oss.oetiker.ch/rrdtool/>
 
   * libyajl

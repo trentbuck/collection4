@@ -42,5 +42,7 @@ collection_fcgi_SOURCES = main.c \
 			  utils_array.c utils_array.h \
 			  utils_cgi.c utils_cgi.h \
 			  utils_search.c utils_search.h
-collection_fcgi_CFLAGS = $(AM_CFLAGS) $(libcollectdclient_CFLAGS)
-collection_fcgi_LDADD = $(libcollectdclient_LIBS)
+
+# FIXME: I don't really know what I'm doing -- this is just a guess!
+collection_fcgi_CFLAGS = $(AM_CFLAGS) $(libcollectdclient_CFLAGS) $(rrd_CFLAGS) $(yajl_CFLAGS) $(fcgi_CFLAGS)
+collection_fcgi_LDADD = $(libcollectdclient_LIBS) $(rrd_LIBS) $(yajl_LIBS) $(fcgi_LIBS) -lm

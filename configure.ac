@@ -23,18 +23,13 @@ AM_CONDITIONAL(COMPILER_IS_GCC, test "x$GCC" = "xyes")
 AC_HEADER_STDC
 AC_CHECK_HEADERS(stdbool.h sys/types.h sys/socket.h netdb.h)
 
-AC_CHECK_HEADERS(fcgiapp.h fcgi_stdio.h rrd.h yajl/yajl_gen.h, [],
-		 [AC_MSG_ERROR(a required header file cannot be found.)])
-
-AC_CHECK_LIB(fcgi, FCGI_Accept, [],
-	     [AC_MSG_ERROR(cannot find libfcgi.)])
-AC_CHECK_LIB(rrd_th, rrd_graph_v, [],
-	     [AC_MSG_ERROR(cannot find librrd_th.)], [-lm])
-AC_CHECK_LIB(yajl, yajl_gen_alloc, [],
-	     [AC_MSG_ERROR(cannot find libyajl.)])
+PKG_CHECK_MODULES([rrd],  [librrd >= 1.6])
+PKG_CHECK_MODULES([yajl], [yajl >= 2.0])
+PKG_CHECK_MODULES([fcgi], [fcgi])
 
 PKG_CHECK_MODULES([libcollectdclient], [libcollectdclient],
 		  [with_libcollectdclient="yes"],
 		  [with_libcollectdclient="no"])
 
-AC_OUTPUT(Makefile share/Makefile src/Makefile)
+AC_CONFIG_FILES([Makefile share/Makefile src/Makefile])
+AC_OUTPUT()
