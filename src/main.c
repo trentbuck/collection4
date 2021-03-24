@@ -156,9 +156,11 @@ int main (void) /* {{{ */
 {
   int status;
 
+/*
   if (FCGX_IsCGI ())
     status = handle_request ();
   else
+ */
     status = run ();
 
   exit ((status == 0) ? EXIT_SUCCESS : EXIT_FAILURE);
