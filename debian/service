@@ -10,7 +10,6 @@ ExecStart=/usr/lib/cgi-bin/collection.fcgi
 StandardOutput=null
 StandardInput=socket
 StandardError=null
-Restart=always
 
 
 # Security lockdown.
