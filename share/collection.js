@@ -306,6 +306,10 @@ function graph_def_to_rickshaw_graph (root_element, graph_def, graph_data)
 
   var graph = new Rickshaw.Graph (graph_config);
   new Rickshaw.Graph.HoverDetail({graph: graph});  // allow hovering over a line to label it.
+  // FIXME: this is a bodge-arse way to insert a legend element, and it's CSS is missing.
+  var legend_element = document.createElement('div');
+  root_element.parentNode.insertBefore(legend_element, root_element.nextSibling);
+  new Rickshaw.Graph.Legend({graph: graph, element: legend_element});
   graph.render ();
 
   var x_axis = new Rickshaw.Graph.Axis.Time({
