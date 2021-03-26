@@ -130,20 +130,29 @@ static int show_time_selector (__attribute__((unused)) void *user_data) /* {{{ *
 
   param_print_hidden (pl);
 
-  printf ("  <select name=\"begin\">\n"
-      "    <option value=\"-3600\">Hour</option>\n"
-      "    <option value=\"-86400\">Day</option>\n"
-      "    <option value=\"-604800\">Week</option>\n"
-      "    <option value=\"-2678400\">Month</option>\n"
-      "    <option value=\"-31622400\">Year</option>\n"
-      "  </select><br />\n");
-  printf ("  <input id=\"format-json\" type=\"radio\" name=\"format\" value=\"JSON\" checked=\"checked\" />"
-      "<label for=\"format-json\">&nbsp;JavaScript</label><br />\n"
-      "  <input id=\"format-rrd\" type=\"radio\" name=\"format\" value=\"RRD\" />"
-      "<label for=\"format-rrd\">&nbsp;RRDtool</label>\n<br />");
-  printf ("  <input type=\"submit\" name=\"button\" value=\"Go\" />\n");
-
-  printf ("</form>\n");
+  /* FIXME: select the current value as the default! */
+  printf(
+         "   <fieldset>\n"
+         "     <legend>Format</legend>\n"
+         "     <div style='display:flex;justify-content:space-evenly'>\n"
+         "       <span><label><input id=format-json type=radio name=format value=JSON checked><label>SVG</label></span>\n"
+         "       <span><label><input id=format-rrd type=radio name=format value=RRD>PNG</label></span>\n"
+         "     </div>\n"
+         "   </fieldset>\n"
+         "   <fieldset >\n"
+         "     <legend>Period</legend>\n"
+         "     <div style='display:flex;justify-content:space-evenly'>\n"
+         "       <span><label><input type=radio name=begin value=-3600>Hour</label></span>\n"
+         "       <span><label><input type=radio name=begin value=-86400 checked>Day</label></span>\n"
+         "       <span><label><input type=radio name=begin value=-604800>Week</label></span>\n"
+         "       <span><label><input type=radio name=begin value=-2678400>Month</label></span>\n"
+         "       <span><label><input type=radio name=begin value=-31622400>Year</label></span>\n"
+         "     </div>\n"
+         "   </fieldset>\n"
+//         "   <input type=submit name=button value=Go style='width:100%'>\n"
+         "   <input type=submit name=button value=Go>\n"
+         "</form>\n"
+         );
 
   param_destroy (pl);
 
