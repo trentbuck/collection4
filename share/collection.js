@@ -305,7 +305,11 @@ function graph_def_to_rickshaw_graph (root_element, graph_def, graph_data)
   var graph_config = graph_def_to_rickshaw_config (root_element, graph_def, graph_data);
 
   var graph = new Rickshaw.Graph (graph_config);
-  new Rickshaw.Graph.HoverDetail({graph: graph});  // allow hovering over a line to label it.
+  new Rickshaw.Graph.HoverDetail({
+    // NOTE: I copied this from https://tech.shutterstock.com/rickshaw/examples/extensions.html
+    //       I have *NO IDEA* why it works, but it gives hover dates in local time.
+    xFormatter: function(x) { return new Date(x * 1000).toString(); },
+    graph: graph});  // allow hovering over a line to label it.
   // FIXME: this is a bodge-arse way to insert a legend element, and it's CSS is missing.
   var legend_element = document.createElement('div');
   root_element.parentNode.insertBefore(legend_element, root_element.nextSibling);
@@ -313,6 +317,9 @@ function graph_def_to_rickshaw_graph (root_element, graph_def, graph_data)
   graph.render ();
 
   var x_axis = new Rickshaw.Graph.Axis.Time({
+    // This makes the X axis label things in local time instead of UTC.
+    // It does NOT affect the labelling of mouseover labels (HoverDetail, above).
+    timeFixture: new Rickshaw.Fixtures.Time.Local(),
     graph: graph
   });
   x_axis.render ();
