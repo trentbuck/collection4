@@ -637,9 +637,15 @@ int graph_to_json (const graph_config_t *cfg, /* {{{ */
   yajl_gen_string (handler,
       (unsigned char *) "title",
       (unsigned int) strlen ("title"));
-  yajl_gen_string (handler,
-      (unsigned char *) cfg->title,
-      (unsigned int) strlen (cfg->title));
+  if (cfg->title != NULL)
+    yajl_gen_string (handler,
+                     (unsigned char *) cfg->title,
+                     (unsigned int) strlen (cfg->title));
+  else
+    yajl_gen_string (handler,
+                     (unsigned char *) "FIXME: SOMETHING WENT BADLY WRONG",
+                     (unsigned int) strlen ("FIXME: SOMETHING WENT BADLY WRONG"));
+
 
   yajl_gen_string (handler,
       (unsigned char *) "select",
