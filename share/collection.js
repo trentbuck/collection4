@@ -305,6 +305,7 @@ function graph_def_to_rickshaw_graph (root_element, graph_def, graph_data)
   var graph_config = graph_def_to_rickshaw_config (root_element, graph_def, graph_data);
 
   var graph = new Rickshaw.Graph (graph_config);
+  new Rickshaw.Graph.HoverDetail({graph: graph});  // allow hovering over a line to label it.
   graph.render ();
 
   var x_axis = new Rickshaw.Graph.Axis.Time({
