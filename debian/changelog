@@ -1,3 +1,9 @@
+collection4 (4.0.0+git2021-03-29-0cyber6) trixie; urgency=medium
+
+  * Bump for trixie.
+
+ -- Trent W. Buck <trentbuck@gmail.com>  Wed, 24 Sep 2025 22:52:43 +1000
+
 collection4 (4.0.0+git2021-03-29-0cyber4) bookworm; urgency=medium
 
   * Do https://wiki.debian.org/HardeningWalkthrough

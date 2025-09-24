@@ -13,3 +13,6 @@ src/.deps/*
 src/parser.c
 src/parser.h
 src/scanner.c
+Makefile
+config.status
+*/Makefile

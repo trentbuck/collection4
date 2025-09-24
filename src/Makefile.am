@@ -7,7 +7,7 @@ if COMPILER_IS_GCC
 AM_CFLAGS = -Wall -Wextra
 endif
 
-AM_YFLAGS = -d
+AM_YFLAGS =
 
 BUILT_SOURCES = parser.h
 
